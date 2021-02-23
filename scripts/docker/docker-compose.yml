@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  underactuated:
+    image: robotlocomotion/underactuated:latest
+    build:
+      # context is the underactuated root directory
+      context: ../..
+      dockerfile: scripts/docker/Dockerfile
+    # Bind ports to host so we can use jupyter in a browser
+    ports:
+      - "7000:7000"
+      - "8888:8888"
+    # Mount the underactuated root directory
+    volumes:
+      - ../..:/root/underactuated
+    working_dir: /root/underactuated
+    command: bash -c "export PYTHONPATH=$$PWD:$${PYTHONPATH} && jupyter notebook --ip=0.0.0.0 --allow-root"
